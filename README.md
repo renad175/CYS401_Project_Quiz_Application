@@ -2,7 +2,7 @@
 
 **CYS401: Fundamentals of Cybersecurity | Prince Sultan University**
 **Chosen Topic: Project 13: Cybersecurity Quiz Application**
-Frontend (HTML + CSS) by **Renad**
+Frontend (HTML + CSS) prepared by **Masa, Amera, Roaa, Renad**
 
 ---
 
@@ -52,7 +52,7 @@ The header (app name) and the footer are outside the screens, so they appear on 
 
 ## 5. IDs for JavaScript
 
-These names are the team's integration contract. **Use them exactly as written in every file.** They are our own naming choices, not requirements from the professor.
+These names are our team's integration contract. **We all use them exactly as written in every file.** They are our own naming choices.
 
 ### Required IDs
 
