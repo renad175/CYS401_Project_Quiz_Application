@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CyberSecure Quiz: a 20-question cybersecurity awareness quiz on phishing, passwords, malware and online safety.">
+  <title>CyberSecure Quiz | CYS401</title>
+<!-- (Member 3: Renad) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&display=swap">
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Lets keyboard users jump straight past the header -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- =====================================================
+       SITE HEADER (will be shown on every screen)
+       ===================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <p class="brand">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path class="brand-mark-shield" d="M16 3.5 26 7v8.2c0 6.1-4.1 11-10 13.3C10.1 26.2 6 21.3 6 15.2V7l10-3.5Z"/>
+          <path class="brand-mark-check" d="m11.5 16 3.2 3.2 6-6.4"/>
+        </svg>
+        <span class="brand-name">CyberSecure Quiz</span>
+      </p>
+      <p class="header-course">CYS401 Section 1292</p>
+    </div>
+  </header>
+
+  <main id="main-content" class="site-main">
+
+    <!-- =====================================================
+         SCREEN 1: HOME & WELCOME
+         Visible when the page first loads.
+         Member 2 hides it when Start is clicked
+         ===================================================== -->
+    <section id="home-screen" class="screen screen-home" aria-labelledby="home-title">
+
+      <div class="container hero">
+        <div class="hero-copy">
+          <h1 id="home-title" class="hero-title">CyberSecure Quiz</h1>
+          <p class="hero-tagline">Test your knowledge. Strengthen your security.</p>
+          <p class="hero-description">
+            20 short questions on the threats people meet every day: fake emails, weak
+            passwords, malicious downloads and risky networks. Every answer comes with a
+            short explanation, so you know why a choice is safe or unsafe.
+          </p>
+
+          <div class="hero-actions">
+            <!-- Member 2 attaches the click handler to this button -->
+            <button id="start-btn" class="btn btn-primary btn-large" type="button">Start Quiz</button>
+            <p class="quiz-facts">20 questions · 4 topics · explanation after every answer</p>
+          </div>
+        </div>
+
+        <!-- Example: a sample phishing email with its warning signs marked.
+             Pure HTML/CSS, no images. Nothing inside it is clickable. -->
+        <figure class="threat-sample">
+          <div class="mail-card">
+            <div class="mail-meta">
+              <p class="mail-row">
+                <span class="mail-label">From</span>
+                <span class="mail-value">
+                  Your Bank Security
+                  <mark class="flag">&lt;security@yourbank-verify.net&gt;</mark><span class="flag-marker" aria-hidden="true">1</span>
+                </span>
+              </p>
+              <p class="mail-row">
+                <span class="mail-label">Subject</span>
+                <span class="mail-value mail-subject">
+                  <mark class="flag">Urgent: account locked in 24 hours</mark><span class="flag-marker" aria-hidden="true">2</span>
+                </span>
+              </p>
+            </div>
+
+            <div class="mail-body">
+              <p>Dear customer, we noticed an unusual sign-in to your account. Confirm your details now to keep access.</p>
+              <span class="mail-fake-button">Confirm my details</span>
+              <p class="mail-link-preview">
+                Link goes to:
+                <mark class="flag">http://yourbank.account-verify.co/login</mark><span class="flag-marker" aria-hidden="true">3</span>
+              </p>
+            </div>
+          </div>
+
+          <figcaption class="threat-legend">
+            <p class="threat-legend-title">Can you spot the warning signs?</p>
+            <ol class="flag-list">
+              <li>The sender's address only imitates the bank</li>
+              <li>A deadline pressures you to act fast</li>
+              <li>The link's real domain is account-verify.co</li>
+            </ol>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Topic overview -->
+      <div class="container topics">
+        <h2 class="section-title">What you'll be tested on</h2>
+        <p class="section-intro">Five questions from each topic, 20 in total.</p>
+
+        <ul class="topic-grid">
+          <li class="topic-card">
+            <span class="topic-icon">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/>
+              </svg>
+            </span>
+            <h3 class="topic-title">Phishing Awareness</h3>
+            <p class="topic-text">Recognize fake emails, messages and login pages before you click.</p>
+          </li>
+
+          <li class="topic-card">
+            <span class="topic-icon">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="8" cy="15.5" r="4.5"/><path d="m11.2 12.3 8.3-8.3"/><path d="m16.5 7 2.5 2.5"/><path d="m14 9.5 2 2"/>
+              </svg>
+            </span>
+            <h3 class="topic-title">Password Security</h3>
+            <p class="topic-text">Build strong passphrases and protect accounts with multi-factor authentication.</p>
+          </li>
+
+          <li class="topic-card">
+            <span class="topic-icon">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="8" y="8" width="8" height="12" rx="4"/><path d="M10 8a2 2 0 0 1 4 0"/><path d="M12 12v8"/><path d="M8 12H4.5M16 12h3.5M8 16H4.5M16 16h3.5M8.5 19 6 21M15.5 19l2.5 2M10.5 5.8 9 4M13.5 5.8 15 4"/>
+              </svg>
+            </span>
+            <h3 class="topic-title">Malware Protection</h3>
+            <p class="topic-text">Avoid infected downloads and know what to do when a device acts strangely.</p>
+          </li>
+
+          <li class="topic-card">
+            <span class="topic-icon">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/>
+              </svg>
+            </span>
+            <h3 class="topic-title">Online Safety</h3>
+            <p class="topic-text">Stay safe on public Wi-Fi, social media and unfamiliar websites.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         SCREEN 2 + 3: QUIZ QUESTION AND ANSWER FEEDBACK
+         HIDDEN when the page loads (see the "hidden" attribute).
+         Member 2 shows it when Start is clicked
+         ===================================================== -->
+    <section id="quiz-screen" class="screen screen-quiz" aria-labelledby="question-text" hidden>
+      <div class="container container-narrow">
+        <article class="quiz-card">
+
+          <!-- Progress: "Question X of 20", difficulty and category badges -->
+          <div class="quiz-status">
+            <p id="question-number" class="question-number">Question 1 of 20</p>
+
+            <div class="quiz-tags">
+              <!-- OPTIONAL: difficulty-level stays invisible while empty.
+                   Member 2 can fill it, e.g. difficultyLevel.textContent = "Medium"; -->
+              <p id="difficulty-level" class="difficulty-badge"></p>
+
+              <!-- Category badge. Use ONE of these two IDs in script.js (the team should pick one):
+                     question-category  -> the whole badge
+                     category-name      -> just the text inside the badge -->
+              <p id="question-category" class="category-badge"><span id="category-name">Category</span></p>
+            </div>
+          </div>
+
+          <!-- Progress bar: Member 2 sets the width of #progress-bar, e.g. "35%" -->
+          <div class="progress-track" aria-hidden="true">
+            <div id="progress-bar" class="progress-fill"></div>
+          </div>
+
+          <!-- Question text (tabindex="-1" lets JavaScript move focus here for screen readers) -->
+          <h2 id="question-text" class="question-text" tabindex="-1">The question will appear here.</h2>
+
+          <!-- Answer options: Member 2 fills this container with four <button> elements.
+               Letters A–D are added automatically by CSS, so the buttons only need the answer text.
+               State classes styled in style.css: selected, correct, incorrect, disabled -->
+          <div id="answer-options" class="answer-options" role="group" aria-labelledby="question-text">
+            <button class="answer-btn" type="button">Answer choice</button>
+            <button class="answer-btn" type="button">Answer choice</button>
+            <button class="answer-btn" type="button">Answer choice</button>
+            <button class="answer-btn" type="button">Answer choice</button>
+          </div>
+
+          <!-- Feedback panel: EMPTY on load, so it takes no space.
+               Member 2 adds the class "feedback-success" or "feedback-error" and the explanation text.
+               role="status" makes screen readers announce it. Keep the tag empty (no spaces inside). -->
+          <div id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true"></div>
+
+          <div class="quiz-actions">
+            <!-- Member 2 attaches the click handler (and may change the label to "See Results" on question 20) -->
+            <button id="next-btn" class="btn btn-primary" type="button">Next Question</button>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         SCREEN 4: FINAL RESULTS
+         HIDDEN when the page loads (see the "hidden" attribute).
+         Member 4 shows it after question 20 and fills in the numbers
+         ===================================================== -->
+    <section id="results-screen" class="screen screen-results" aria-labelledby="results-title" hidden>
+      <div class="container container-narrow">
+        <article class="results-card">
+
+          <div class="results-header">
+            <span class="results-icon">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M12 3 19.5 6v6c0 4.6-3.1 8.3-7.5 9.9C7.6 20.3 4.5 16.6 4.5 12V6L12 3Z"/><path d="m8.8 12.2 2.3 2.3 4.4-4.7"/>
+              </svg>
+            </span>
+            <h2 id="results-title" class="results-title">Quiz Completed!</h2>
+            <p class="results-subtitle">Here's how you did across all four topics.</p>
+          </div>
+
+          <div class="results-body">
+            <!-- Score ring: Member 4 sets the fill with
+                 document.getElementById("score-ring").style.setProperty("--score", percentage); -->
+            <div id="score-ring" class="score-ring">
+              <div class="score-ring-center">
+                <span id="score-percentage" class="score-percentage">0%</span>
+                <span class="score-ring-label">Score</span>
+              </div>
+            </div>
+
+            <div class="results-details">
+              <!-- Member 4 replaces these placeholder numbers -->
+              <dl class="results-stats">
+                <div class="stat stat-score">
+                  <dt>Final score</dt>
+                  <dd id="final-score">0/20</dd>
+                </div>
+                <div class="stat stat-correct">
+                  <dt>Correct</dt>
+                  <dd id="correct-count">0</dd>
+                </div>
+                <div class="stat stat-incorrect">
+                  <dt>Incorrect</dt>
+                  <dd id="incorrect-count">0</dd>
+                </div>
+              </dl>
+              <p id="performance-message" class="performance-message">Your result summary will appear here.</p>
+            </div>
+          </div>
+          <div class="focus-area">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>
+            </svg>
+            <div class="focus-content">
+              <p class="focus-item">
+                <span class="focus-label">Topic to review:</span>
+                <span id="weak-category" class="focus-value"></span>
+              </p>
+              <p id="recommendation" class="recommendation"></p>
+            </div>
+          </div>
+
+          <aside class="awareness-note" aria-label="Security reminder">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="7.75" r=".6"/>
+            </svg>
+            <p>
+              <strong>Take it beyond the quiz.</strong>
+              Pause before you click a link, use a different passphrase with multi-factor
+              authentication for every important account, and install updates as soon as they arrive.
+            </p>
+          </aside>
+
+          <div class="results-actions">
+            <!-- Member 4 attaches the restart click handler -->
+            <button id="restart-btn" class="btn btn-primary btn-large" type="button">Restart Quiz</button>
+          </div>
+
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================
+       SITE FOOTER
+       ===================================================== -->
+  <footer class="site-footer">
+    <p>CYS401 – Fundamentals of Cybersecurity | Prince Sultan University</p>
+  </footer>
+  <!-- =====================================================
+       JAVASCRIPT FILES
+       1) script.js  – created by Members 1, 2 and 4 (questions, quiz logic, score, restart).
+                       Until the file exists, the browser console shows a harmless "file not found" message.
+       2) preview.js – TEMPORARY design preview by Member 3. It only runs when the address
+                       ends with ?preview=quiz, ?preview=correct, ?preview=incorrect or ?preview=results.
+                       Delete this line and preview.js before final submission.
+       Scripts are placed at the end of <body> so every element above already exists when they run.
+       ===================================================== -->
+  <script src="script.js"></script>
+  <script src="preview.js"></script>
+</body>
+</html>

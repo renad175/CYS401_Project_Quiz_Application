@@ -1,0 +1,999 @@
+/* ==========================================================================
+   CyberSecure Quiz – style.css
+   CYS401 Section 1292 | Member 3: Frontend (HTML + CSS)
+
+   CONTENTS
+   1.  Colors and sizes (variables)
+   2.  Base styles
+   3.  Accessibility helpers
+   4.  Page layout (header, main, footer)
+   5.  Buttons
+   6.  Screen 1 – Home (intro, phishing email example, topics)
+   7.  Screen 2 – Quiz (status, progress bar, question, answers)
+   8.  Answer states (.selected, .correct, .incorrect, .disabled)
+   9.  Screen 3 – Feedback panel
+   10. Screen 4 – Results
+   11. Animations
+   12. Wider screens
+   13. Reduced motion
+   14. Hidden elements (kept last on purpose)
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. COLORS AND SIZES
+   Change a value here and it updates everywhere it is used.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+
+  --color-bg: #0B1120;            /* dark navy page background */
+  --color-surface: #131C30;       /* cards */
+  --color-surface-2: #0F1728;     /* answer buttons, stat boxes */
+  --color-border: #24314D;
+  --color-text: #F1F5F9;
+  --color-text-soft: #CBD5E1;
+  --color-muted: #A3B1C6;
+
+  --color-blue: #3B82F6;
+  --color-cyan: #22D3EE;
+  --color-blue-soft: rgba(59, 130, 246, 0.14);
+  --color-cyan-soft: rgba(34, 211, 238, 0.12);
+  --color-on-accent: #0B1120;     /* text on blue/cyan */
+
+  --color-success: #34D399;
+  --color-success-soft: rgba(52, 211, 153, 0.12);
+  --color-danger: #F87171;
+  --color-danger-soft: rgba(248, 113, 113, 0.12);
+
+  --font-heading: "Sora", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+
+  --radius: 12px;
+  --container-width: 1120px;
+  --container-narrow: 800px;
+}
+
+
+/* ==========================================================================
+   2. BASE STYLES
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* One soft blue light at the top of the page */
+  background: radial-gradient(ellipse 60% 40% at 80% 0%, rgba(59, 130, 246, 0.12), transparent 70%) no-repeat,
+              var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+}
+
+/* Shared style for the small line icons */
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* ==========================================================================
+   3. ACCESSIBILITY HELPERS
+   ========================================================================== */
+
+/* Visible focus ring for keyboard users */
+:focus-visible {
+  outline: 3px solid var(--color-cyan);
+  outline-offset: 3px;
+}
+
+/* The question heading receives focus from JavaScript only, so no ring is needed */
+.question-text:focus {
+  outline: none;
+}
+
+/* "Skip to main content" link: hidden until it receives keyboard focus */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: var(--color-cyan);
+  color: var(--color-on-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+
+/* ==========================================================================
+   4. PAGE LAYOUT
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.container-narrow {
+  max-width: var(--container-narrow);
+}
+
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 60px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.brand-mark {
+  width: 28px;
+  height: 28px;
+}
+
+.brand-mark-shield {
+  fill: var(--color-blue);
+}
+
+.brand-mark-check {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.header-course {
+  padding: 0.125rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.site-main {
+  flex: 1;
+  padding-block: 2rem 3.5rem;
+}
+
+.site-footer {
+  padding: 1.25rem 1rem;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+
+/* ==========================================================================
+   5. BUTTONS
+   ========================================================================== */
+.btn {
+  min-height: 46px;
+  padding: 0.625rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+/* Main button: blue to cyan with dark text (high contrast) */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-blue), var(--color-cyan));
+  color: var(--color-on-accent);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-large {
+  min-height: 52px;
+  padding: 0.75rem 2rem;
+  font-size: 1.0625rem;
+}
+
+/* Disabled buttons (e.g. Member 2 may disable Next until an answer is chosen) */
+.btn:disabled,
+.btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: none;
+}
+
+
+/* ==========================================================================
+   6. SCREEN 1 – HOME
+   ========================================================================== */
+.hero {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.hero-tagline {
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-cyan);
+}
+
+.hero-description {
+  margin-top: 1rem;
+  max-width: 36em;
+  color: var(--color-muted);
+}
+
+.hero-actions {
+  margin-top: 1.75rem;
+}
+
+.quiz-facts {
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+/* ---------- Phishing email example ---------- */
+.mail-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font-size: 0.9375rem;
+}
+
+.mail-meta {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.125rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mail-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.mail-label {
+  flex: 0 0 3.75rem;
+  color: var(--color-muted);
+}
+
+.mail-value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mail-subject {
+  font-weight: 600;
+}
+
+.mail-body {
+  padding: 1.125rem;
+  color: var(--color-muted);
+}
+
+/* Looks like a button inside the example, but is plain text on purpose (not clickable) */
+.mail-fake-button {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 6px;
+  background: #1D4ED8;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.mail-link-preview {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+/* Red highlight on each warning sign */
+.flag {
+  padding: 0 0.25em;
+  border-radius: 4px;
+  background: var(--color-danger-soft);
+  box-shadow: inset 0 -2px 0 var(--color-danger);
+  color: inherit;
+}
+
+/* Small red number next to each highlight, matching the list below */
+.flag-marker {
+  display: inline-grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-left: 0.25rem;
+  border-radius: 50%;
+  background: var(--color-danger);
+  color: var(--color-on-accent);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  vertical-align: 0.1em;
+}
+
+.threat-legend {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+}
+
+.threat-legend-title {
+  font-weight: 600;
+  color: var(--color-text-soft);
+}
+
+.flag-list {
+  margin-top: 0.25rem;
+  padding-left: 1.25rem;
+  color: var(--color-muted);
+}
+
+.flag-list li::marker {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+/* ---------- Topics ---------- */
+.topics {
+  margin-top: 3.5rem;
+}
+
+.section-title {
+  font-size: 1.625rem;
+}
+
+.section-intro {
+  margin-top: 0.25rem;
+  color: var(--color-muted);
+}
+
+.topic-grid {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.topic-card {
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.topic-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--color-cyan-soft);
+  color: var(--color-cyan);
+}
+
+.topic-title {
+  margin-top: 0.875rem;
+  font-size: 1.0625rem;
+}
+
+.topic-text {
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
+
+
+/* ==========================================================================
+   7. SCREEN 2 – QUIZ
+   ========================================================================== */
+
+/* Shared card used by the quiz and results screens */
+.quiz-card,
+.results-card {
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.quiz-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.question-number {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.quiz-tags {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.difficulty-badge,
+.category-badge {
+  padding: 0.125rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.difficulty-badge {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-soft);
+}
+
+/* Optional difficulty badge: hidden while empty */
+.difficulty-badge:empty {
+  display: none;
+}
+
+.category-badge {
+  background: var(--color-cyan-soft);
+  color: var(--color-cyan);
+}
+
+/* ---------- Progress bar ---------- */
+.progress-track {
+  margin-top: 0.875rem;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.15);
+}
+
+/* Member 2 changes the width with JavaScript (e.g. progressBar.style.width = "35%") */
+.progress-fill {
+  width: 5%;               /* default = question 1 of 20 */
+  max-width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-blue), var(--color-cyan));
+  transition: width 0.4s ease;
+}
+
+/* ---------- Question ---------- */
+.question-text {
+  margin-top: 1.5rem;
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+/* ---------- Answer buttons ----------
+   Any <button> placed inside #answer-options gets this style.
+   The letter (A, B, C, D) is generated by a CSS counter, so JavaScript
+   only needs to put the answer text inside each button. */
+.answer-options {
+  counter-reset: option;
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.answer-options > button {
+  counter-increment: option;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 60px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Letter in front of each answer */
+.answer-options > button::before {
+  content: counter(option, upper-alpha);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+/* Hover (only while the answer can still be chosen) */
+.answer-options > button:not(:disabled):not(.disabled):hover {
+  border-color: var(--color-blue);
+  background: var(--color-blue-soft);
+}
+
+
+/* ==========================================================================
+   8. ANSWER STATES
+   Member 2 adds these classes with JavaScript, for example:
+     button.classList.add("selected");
+   ========================================================================== */
+
+/* .selected – the option the user clicked */
+.answer-options > button.selected {
+  border-color: var(--color-blue);
+  background: var(--color-blue-soft);
+}
+
+.answer-options > button.selected::before {
+  border-color: var(--color-blue);
+  background: var(--color-blue);
+  color: var(--color-on-accent);
+}
+
+/* .correct – the right answer (green, letter becomes a check mark) */
+.answer-options > button.correct {
+  border-color: var(--color-success);
+  background: var(--color-success-soft);
+}
+
+.answer-options > button.correct::before {
+  content: "\2713";
+  border-color: var(--color-success);
+  background: var(--color-success);
+  color: var(--color-on-accent);
+}
+
+/* .incorrect – the wrong answer the user picked (red, letter becomes a cross) */
+.answer-options > button.incorrect {
+  border-color: var(--color-danger);
+  background: var(--color-danger-soft);
+}
+
+.answer-options > button.incorrect::before {
+  content: "\2715";
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+  color: var(--color-on-accent);
+}
+
+/* After a wrong answer, small labels show which option was right */
+.answer-options > button.incorrect::after,
+.answer-options:has(> .incorrect) > button.correct::after {
+  margin-left: auto;
+  padding-left: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.answer-options > button.incorrect::after {
+  content: "Your answer";
+  color: var(--color-danger);
+}
+
+.answer-options:has(> .incorrect) > button.correct::after {
+  content: "Correct answer";
+  color: var(--color-success);
+}
+
+/* .disabled (or the disabled attribute) – answers locked after submission */
+.answer-options > button:disabled,
+.answer-options > button.disabled {
+  cursor: default;
+}
+
+/* Locked options that were not chosen and are not the answer fade back */
+.answer-options > button:is(:disabled, .disabled):not(.selected):not(.correct):not(.incorrect) {
+  opacity: 0.45;
+}
+
+
+/* ==========================================================================
+   9. SCREEN 3 – FEEDBACK PANEL
+   Empty on load (takes no space). Member 2 fills it after each answer and adds
+   .feedback-success or .feedback-error.
+   ========================================================================== */
+.feedback {
+  margin-top: 1.25rem;
+  padding: 0.875rem 1.125rem;
+  border-left: 4px solid var(--color-blue);
+  border-radius: 8px;
+  background: var(--color-blue-soft);
+  font-size: 0.9375rem;
+  animation: fade-in 0.3s ease;
+}
+
+/* Collapsed while empty (stays in the page so screen readers still announce new text) */
+.feedback:empty {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  animation: none;
+}
+
+/* Optional inner markup */
+.feedback-title,
+.feedback > strong:first-child {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-heading);
+}
+
+.feedback-explanation {
+  color: var(--color-text-soft);
+}
+
+.feedback-success {
+  border-left-color: var(--color-success);
+  background: var(--color-success-soft);
+}
+
+.feedback-success .feedback-title,
+.feedback-success > strong:first-child {
+  color: var(--color-success);
+}
+
+.feedback-error {
+  border-left-color: var(--color-danger);
+  background: var(--color-danger-soft);
+}
+
+.feedback-error .feedback-title,
+.feedback-error > strong:first-child {
+  color: var(--color-danger);
+}
+
+/* Bottom row with the Next button */
+.quiz-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+/* ==========================================================================
+   10. SCREEN 4 – RESULTS
+   ========================================================================== */
+.results-header {
+  text-align: center;
+}
+
+.results-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.results-icon .icon {
+  width: 1.625rem;
+  height: 1.625rem;
+}
+
+.results-title {
+  margin-top: 0.75rem;
+  font-size: 1.875rem;
+}
+
+.results-subtitle {
+  margin-top: 0.25rem;
+  color: var(--color-muted);
+}
+
+.results-body {
+  margin-top: 1.75rem;
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+}
+
+/* ---------- Score ring ----------
+   The ring fill comes from the --score custom property (0 to 100).
+   Member 4 sets it: scoreRing.style.setProperty("--score", 80); */
+@property --score {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.score-ring {
+  --score: 0;
+  display: grid;
+  place-items: center;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-cyan) 0%,
+    var(--color-blue) calc(var(--score) * 1%),
+    rgba(148, 163, 184, 0.15) calc(var(--score) * 1%) 100%
+  );
+  animation: ring-fill 1s ease-out backwards;
+}
+
+.score-ring-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 144px;
+  height: 144px;
+  border-radius: 50%;
+  background: var(--color-surface);
+}
+
+.score-percentage {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score-ring-label {
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+/* ---------- Stats ---------- */
+.results-details {
+  width: 100%;
+}
+
+.results-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.stat {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface-2);
+  text-align: center;
+}
+
+.stat dt {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.stat dd {
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: 700;
+}
+
+.stat-correct dd {
+  color: var(--color-success);
+}
+
+.stat-incorrect dd {
+  color: var(--color-danger);
+}
+
+.performance-message {
+  margin-top: 1rem;
+  color: var(--color-text-soft);
+}
+
+/* ---------- Optional focus area (weak-category + recommendation) ----------
+   Shows only when Member 4 puts text in at least one of the two elements. */
+.focus-area,
+.awareness-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding: 0.875rem 1.125rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+}
+
+.focus-area {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+}
+
+.focus-area .icon,
+.awareness-note .icon {
+  margin-top: 0.125rem;
+  color: var(--color-cyan);
+}
+
+.focus-area:has(#weak-category:empty):has(#recommendation:empty),
+.focus-item:has(#weak-category:empty),
+.recommendation:empty {
+  display: none;
+}
+
+.focus-label {
+  color: var(--color-muted);
+}
+
+.focus-value {
+  font-weight: 600;
+}
+
+.recommendation {
+  margin-top: 0.25rem;
+  color: var(--color-text-soft);
+}
+
+/* ---------- Security reminder ---------- */
+.awareness-note {
+  background: var(--color-blue-soft);
+  color: var(--color-muted);
+}
+
+.awareness-note strong {
+  color: var(--color-text);
+}
+
+.results-actions {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+
+/* ==========================================================================
+   11. ANIMATIONS (kept short and simple)
+   ========================================================================== */
+
+/* Each screen fades in when JavaScript shows it */
+.screen {
+  animation: fade-in 0.35s ease both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Ring fills from 0 up to the --score value when the results screen appears */
+@keyframes ring-fill {
+  from { --score: 0; }
+}
+
+
+/* ==========================================================================
+   12. WIDER SCREENS
+   Phone layout above is the default. These rules add columns on wider screens.
+   ========================================================================== */
+@media (min-width: 640px) {
+  .quiz-card,
+  .results-card {
+    padding: 2rem;
+  }
+
+  .topic-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  /* Answers sit in a 2 x 2 grid */
+  .answer-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Results: score ring on the left, numbers on the right */
+  .results-body {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Intro text on the left, email example on the right */
+  .hero {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 3.5rem;
+    padding-top: 1rem;
+  }
+
+  .hero-title {
+    font-size: 3.25rem;
+  }
+
+  .topic-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+/* ==========================================================================
+   13. REDUCED MOTION
+   If the user's device asks for less motion, switch animations off.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* ==========================================================================
+   14. HIDDEN ELEMENTS (keep this rule last)
+   Screens start hidden with the HTML "hidden" attribute.
+   JavaScript shows or hides any of them with:
+     element.hidden = false;   // show
+     element.hidden = true;    // hide
+   ========================================================================== */
+[hidden] {
+  display: none;
+}
