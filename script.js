@@ -150,7 +150,7 @@ const questions = [
   }
 
 ];
-
+//amera
 const ameraPasswordQuestions = [
   {
     category: "Password Security",
