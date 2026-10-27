@@ -27,24 +27,27 @@
 :root {
   color-scheme: dark;
 
-  --color-bg: #0B1120;            /* dark navy page background */
-  --color-surface: #131C30;       /* cards */
-  --color-surface-2: #0F1728;     /* answer buttons, stat boxes */
-  --color-border: #24314D;
-  --color-text: #F1F5F9;
-  --color-text-soft: #CBD5E1;
-  --color-muted: #A3B1C6;
+  --color-bg: #071A0D;
+  --color-surface: #0D2B16;
+  --color-surface-2: #123A1D;
+  --color-border: #28633A;
 
-  --color-blue: #3B82F6;
-  --color-cyan: #22D3EE;
-  --color-blue-soft: rgba(59, 130, 246, 0.14);
-  --color-cyan-soft: rgba(34, 211, 238, 0.12);
-  --color-on-accent: #0B1120;     /* text on blue/cyan */
+  --color-text: #F1F8F2;
+  --color-text-soft: #C8E6CC;
+  --color-muted: #9DB8A3;
 
-  --color-success: #34D399;
-  --color-success-soft: rgba(52, 211, 153, 0.12);
-  --color-danger: #F87171;
-  --color-danger-soft: rgba(248, 113, 113, 0.12);
+  --color-blue: #2E7D32;
+  --color-cyan: #66BB6A;
+  --color-blue-soft: rgba(46, 125, 50, 0.22);
+  --color-cyan-soft: rgba(102, 187, 106, 0.18);
+
+  --color-on-accent: #FFFFFF;
+
+  --color-success: #4CAF50;
+  --color-success-soft: rgba(76, 175, 80, 0.2);
+
+  --color-danger: #EF5350;
+  --color-danger-soft: rgba(239, 83, 80, 0.2);
 
   --font-heading: "Sora", "Segoe UI", system-ui, sans-serif;
   --font-body: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
@@ -69,9 +72,15 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  /* One soft blue light at the top of the page */
-  background: radial-gradient(ellipse 60% 40% at 80% 0%, rgba(59, 130, 246, 0.12), transparent 70%) no-repeat,
-              var(--color-bg);
+
+  background:
+    radial-gradient(
+      ellipse 60% 40% at 80% 0%,
+      rgba(46, 125, 50, 0.22),
+      transparent 70%
+    ) no-repeat,
+    var(--color-bg);
+
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 1rem;
