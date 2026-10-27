@@ -1,17 +1,10 @@
-/* ==========================================================================
-   CyberSecure Quiz – script.js
-   CYS401 Section 1292
-     Member 1: Masa – Questions
-     Member 2: Amera – Quiz navigation and feedback
-     Member 4: Roaa – Score, results and restart
+"use strict";
 
-   The IDs and CSS classes you can use are listed in README.md (sections 5 and 6).
-   ========================================================================== */
+/* =========================================================
+   CyberSecure Quiz
+   24 questions: 6 per category
+   ========================================================= */
 
-
-/* ==========================================================================
-   PAGE ELEMENTS (shared so everyone can use these)
-   ========================================================================== */
 const homeScreen = document.getElementById("home-screen");
 const quizScreen = document.getElementById("quiz-screen");
 const resultsScreen = document.getElementById("results-screen");
@@ -37,33 +30,17 @@ const performanceMessage = document.getElementById("performance-message");
 const weakCategory = document.getElementById("weak-category");
 const recommendation = document.getElementById("recommendation");
 
+let currentQuestion = 0;
+let score = 0;
+let answerSelected = false;
+let categoryScores = {};
 
-/* ==========================================================================
-   QUIZ STATE (shared – Member 2 and Member 4 both use these)
-   ========================================================================== */
-let currentQuestion = 0;   // index of the question being shown (0 to 19)
-let score = 0;             // number of correct answers
+/* =========================================================
+   QUESTION BANK
+   ========================================================= */
 
-
-/* ==========================================================================
-   MEMBER 1 – QUESTIONS
-   20 questions: 5 Phishing Awareness, 5 Password Security,
-   5 Malware Protection, 5 Online Safety.
-   Each question follows this format:
-     {
-       category: "Phishing Awareness",
-       difficulty: "Easy",            // optional
-       question: "Question text?",
-       choices: ["Choice A", "Choice B", "Choice C", "Choice D"],
-       answer: 1,                     // index of the correct choice (0 to 3)
-       explanation: "Why this answer is correct."
-     }
-   Remember to cite your sources in the report.
-   ========================================================================== */
 const questions = [
-  
-  // GIRL 1 - MASA
-  // Phishing & Social Engineering - 6 Questions
+  /* ---------- Phishing & Social Engineering ---------- */
 
   {
     category: "Phishing & Social Engineering",
@@ -71,12 +48,12 @@ const questions = [
     question: "You receive an unexpected email saying your bank account will be locked unless you click a link immediately. What should you do?",
     choices: [
       "Click the link and enter your password",
-      "Reply to the sender with your account number",
-      "Open your bank's official app or type its known website address to verify the alert",
+      "Reply with your account number",
+      "Open the official banking app or website to verify the alert",
       "Forward the email to your friends"
     ],
     answer: 2,
-    explanation: "Urgent account warnings may be phishing attempts. Verify the message through the bank's official app or website instead of the email link."
+    explanation: "Urgent account warnings may be phishing attempts. Verify the message through the official app or website instead of using the email link."
   },
 
   {
@@ -84,240 +61,428 @@ const questions = [
     difficulty: "Easy",
     question: "Which email detail is a common warning sign of phishing?",
     choices: [
-      "A company logo at the top",
-      "A sender address with a misspelled domain name",
+      "A company logo",
+      "A sender address with a misspelled domain",
       "A clear subject line",
-      "Correct spelling and grammar"
+      "Correct spelling"
     ],
     answer: 1,
-    explanation: "Attackers may use look-alike domains or misleading sender addresses to impersonate trusted organizations. Good grammar or a logo does not prove a message is genuine."
+    explanation: "Attackers often use look-alike domains or misleading sender addresses to impersonate trusted organizations."
   },
 
   {
     category: "Phishing & Social Engineering",
     difficulty: "Easy",
-    question: "You get a text message about a delivery you were not expecting, asking you to pay a small fee using a link. What is the safest action?",
+    question: "You receive a text message about an unexpected delivery asking you to pay through a link. What should you do?",
     choices: [
-      "Pay quickly so the delivery is not delayed",
-      "Send your card details in a reply",
-      "Share the message with friends to ask whether the link works",
-      "Check directly through the delivery company's verified website or app"
+      "Pay immediately",
+      "Send your card details",
+      "Forward it to friends",
+      "Verify the delivery through the official company website or app"
     ],
     answer: 3,
-    explanation: "Phishing can also happen through text messages (smishing). An unexpected payment link should be verified independently through the organization's official channel."
+    explanation: "Unexpected payment links may be smishing attempts. Verify the message through an official channel."
   },
 
   {
     category: "Phishing & Social Engineering",
     difficulty: "Medium",
-    question: "Someone claiming to be university IT support messages you and asks for a one-time login verification code. What should you do?",
+    question: "Someone claiming to be university IT support asks for your one-time login code. What should you do?",
     choices: [
-      "Refuse to share the code and contact IT support through an official university channel",
+      "Refuse and contact IT through an official channel",
       "Share the code because IT staff are trusted",
-      "Send the code only if the sender knows your name",
-      "Post the code in the class group for confirmation"
+      "Send it if the person knows your name",
+      "Post it in the class group"
     ],
     answer: 0,
-    explanation: "A one-time verification code is a security credential. Do not share it in response to an unexpected request; independently contact the real support team."
+    explanation: "One-time codes are security credentials. Never share them in response to an unexpected request."
   },
 
   {
     category: "Phishing & Social Engineering",
     difficulty: "Medium",
-    question: "An unfamiliar sender emails you an unexpected invoice attachment. What is the safest response?",
+    question: "You receive an unexpected invoice attachment from an unfamiliar sender. What is safest?",
     choices: [
-      "Open it to find out what the invoice is for",
-      "Download the attachment before checking the sender",
-      "Avoid the attachment and verify the request through a trusted contact method",
-      "Reply with your personal details to confirm your identity"
+      "Open it immediately",
+      "Download it first",
+      "Avoid it and verify the request through a trusted contact method",
+      "Reply with your personal details"
     ],
     answer: 2,
-    explanation: "Unexpected attachments can contain harmful software or be part of a phishing attempt. Confirm authenticity using independently verified contact information before opening them."
+    explanation: "Unexpected attachments may contain malware or be part of a phishing attempt."
   },
 
   {
     category: "Phishing & Social Engineering",
-    difficulty: "Medium",
-    question: "You realize you entered your password on a fake login page reached through a suspicious email. What should you do first?",
+    difficulty: "Hard",
+    question: "You entered your password on a fake login page. What should you do first?",
     choices: [
-      "Ignore it if the page looked professional",
-      "Wait to see whether someone accesses your account",
-      "Send another password to the same sender",
-      "Use the real website to change the password immediately, enable MFA, and report the incident"
+      "Ignore it",
+      "Wait for suspicious activity",
+      "Send another password",
+      "Change the password through the real website and enable MFA"
     ],
     answer: 3,
-    explanation: "If you provided credentials to a phishing page, use the genuine service to secure the account, turn on multifactor authentication, and follow the appropriate reporting process."
-  }
+    explanation: "Use the genuine service to secure the account, enable multifactor authentication, and report the incident."
+  },
 
-];
-//amera
-const ameraPasswordQuestions = [
+  /* ---------- Passwords & Authentication ---------- */
+
   {
-    category: "Password Security",
+    category: "Passwords & Authentication",
     difficulty: "Easy",
-    question: "Which practice gives your university account the strongest password protection?",
+    question: "Which practice provides the strongest password protection?",
     choices: [
-      "Using your name and graduation year",
-      "Using the same password on all websites",
-      "Using a long, unique password or passphrase for this account",
-      "Using a short password with an exclamation mark"
+      "Using your name and birth year",
+      "Using the same password everywhere",
+      "Using a long, unique passphrase",
+      "Using a short password with a symbol"
     ],
     answer: 2,
-    explanation: "Choose a long password or passphrase that is unique to each account. Length and uniqueness matter more than predictable changes such as adding a symbol.",
-    source: "https://pages.nist.gov/800-63-4/sp800-63b.html ; https://www.cisa.gov/secure-our-world"
+    explanation: "Long and unique passwords are harder to guess and prevent one breach from affecting multiple accounts."
   },
+
   {
-    category: "Password Security",
+    category: "Passwords & Authentication",
     difficulty: "Medium",
-    question: "A shopping website reports a password breach. You used the same password for your email. What should you do?",
+    question: "A website reports a password breach and you reused that password for email. What should you do?",
     choices: [
-      "Change only the shopping website password",
-      "Wait until the email provider sends a warning",
-      "Keep both passwords if they contain symbols",
-      "Change both passwords to different, unique ones and enable MFA"
+      "Change only the website password",
+      "Wait for an email warning",
+      "Keep both passwords",
+      "Change both passwords to unique passwords and enable MFA"
     ],
     answer: 3,
-    explanation: "Password reuse can expose your other accounts after a breach. Replace the compromised and reused passwords with different strong passwords and enable multifactor authentication.",
-    source: "https://pages.nist.gov/800-63-4/sp800-63b.html ; https://www.cisa.gov/secure-our-world"
+    explanation: "Password reuse can expose other accounts after a breach."
   },
+
   {
-    category: "Password Security",
+    category: "Passwords & Authentication",
     difficulty: "Easy",
-    question: "Why should you enable multifactor authentication (MFA) on your email account?",
+    question: "Why should you enable multifactor authentication?",
     choices: [
-      "It adds another verification step if a password is stolen",
-      "It means you never need to protect your password",
-      "It deletes phishing messages automatically",
-      "It makes all websites completely secure"
+      "It adds another verification step if your password is stolen",
+      "It removes the need for passwords",
+      "It deletes phishing messages",
+      "It makes every website secure"
     ],
     answer: 0,
-    explanation: "MFA adds a second way to verify that a person signing in is the account owner, making password theft alone less useful to attackers.",
-    source: "https://www.cisa.gov/secure-our-world/turn-mfa"
+    explanation: "MFA makes password theft alone less useful to attackers."
   },
+
   {
-    category: "Password Security",
+    category: "Passwords & Authentication",
     difficulty: "Medium",
-    question: "What is a primary security benefit of using a reputable password manager?",
+    question: "What is a benefit of using a reputable password manager?",
     choices: [
-      "It lets you safely reuse one password everywhere",
-      "It can generate and store different strong passwords for each account",
-      "It removes the need for account recovery methods",
-      "It prevents every possible type of cyberattack"
+      "It lets you reuse one password",
+      "It creates and stores different strong passwords",
+      "It removes account recovery",
+      "It prevents every cyberattack"
     ],
     answer: 1,
-    explanation: "A password manager helps create and store long, different passwords instead of relying on reuse or memory. Protect the password manager itself with a strong master password and MFA where available.",
-    source: "https://www.cisa.gov/resources-tools/training/cyb3rsmrt-use-password-manager-create-and-remember-strong-passwords"
+    explanation: "Password managers help users create and store unique passwords for different accounts."
   },
+
   {
-    category: "Password Security",
+    category: "Passwords & Authentication",
     difficulty: "Hard",
-    question: "Your authenticator app suddenly asks you to approve a sign-in you did not start. What is the safest response?",
+    question: "Your authenticator app asks you to approve a login you did not start. What should you do?",
     choices: [
-      "Approve it to stop repeated notifications",
-      "Share the verification code with whoever contacts you",
-      "Deny and report the unexpected request, then check your account security",
-      "Disable MFA permanently"
+      "Approve it",
+      "Share the code",
+      "Deny it and check your account security",
+      "Disable MFA"
     ],
     answer: 2,
-    explanation: "An unexpected MFA request may indicate that someone else is trying to access your account. Do not approve it. Deny or report the request and review account security through the official service.",
-    source: "https://support.microsoft.com/en-us/accounts-billing/security/using-outlook-mobile-to-sign-in ; https://learn.microsoft.com/en-us/azure/active-directory/authentication/howto-mfa-mfasettings"
+    explanation: "An unexpected MFA request may mean someone is trying to access your account."
   },
+
   {
-    // OPTIONAL sixth question: include only if the final team quiz has 24 questions.
-    category: "Password Security",
+    category: "Passwords & Authentication",
     difficulty: "Hard",
-    question: "Under current NIST guidance, when should a password generally be changed?",
+    question: "When should a password generally be changed?",
     choices: [
-      "Every seven days, even with no security issue",
-      "Every 30 days to keep attackers guessing",
-      "Only after the device is restarted",
-      "When there is evidence of compromise or another valid reason, not on an arbitrary schedule"
+      "Every seven days",
+      "Every 30 days",
+      "Only after restarting your device",
+      "When it is compromised or there is another valid reason"
     ],
     answer: 3,
-    explanation: "NIST advises against routine, arbitrary password-expiration rules and requires a change when a password is known or suspected to be compromised.",
-    source: "https://pages.nist.gov/800-63-4/sp800-63b.html"
+    explanation: "Passwords should be changed when compromise is suspected or when another security reason requires it."
+  },
+
+  /* ---------- Malware & Device Security ---------- */
+
+  {
+    category: "Malware & Device Security",
+    difficulty: "Easy",
+    question: "A pop-up says your laptop is infected and asks you to call a number. What should you do?",
+    choices: [
+      "Call the number",
+      "Click Scan Now",
+      "Close it and run your own security scan",
+      "Give the caller remote access"
+    ],
+    answer: 2,
+    explanation: "Fake virus alerts are often technical-support scams. Close the page and use trusted security software."
+  },
+
+  {
+    category: "Malware & Device Security",
+    difficulty: "Medium",
+    question: "Which habit helps you recover files after ransomware?",
+    choices: [
+      "Keep tested backups offline",
+      "Copy files into another folder on the same laptop",
+      "Rename the files",
+      "Keep a backup USB permanently connected"
+    ],
+    answer: 0,
+    explanation: "Offline backups are less likely to be encrypted or deleted by ransomware."
+  },
+
+  {
+    category: "Malware & Device Security",
+    difficulty: "Medium",
+    question: "An unexpected Office attachment asks you to enable content. What should you do?",
+    choices: [
+      "Enable it immediately",
+      "Enable it if antivirus is running",
+      "Save it and enable it later",
+      "Do not enable it and verify the sender independently"
+    ],
+    answer: 3,
+    explanation: "Malicious macros can install malware. Do not enable content in unexpected files."
+  },
+
+  {
+    category: "Malware & Device Security",
+    difficulty: "Easy",
+    question: "Why should you install operating-system updates?",
+    choices: [
+      "They only change the appearance",
+      "They patch security weaknesses",
+      "They delete all existing malware",
+      "They are needed only when the device is slow"
+    ],
+    answer: 1,
+    explanation: "Many updates fix vulnerabilities that attackers can exploit."
+  },
+
+  {
+    category: "Malware & Device Security",
+    difficulty: "Medium",
+    question: "Where is the safest place to download a free application?",
+    choices: [
+      "The first sponsored search result",
+      "A file-sharing website",
+      "The developer's official website",
+      "A social-media comment"
+    ],
+    answer: 2,
+    explanation: "Official websites reduce the risk of downloading fake or infected software."
+  },
+
+  {
+    category: "Malware & Device Security",
+    difficulty: "Hard",
+    question: "Your device suddenly becomes very slow and shows unknown applications. What should you do?",
+    choices: [
+      "Ignore it",
+      "Download another unknown cleaner",
+      "Disconnect it from the network and run a trusted security scan",
+      "Share your login details online"
+    ],
+    answer: 2,
+    explanation: "Unexpected behavior may indicate malware. Disconnecting can limit further communication while you investigate safely."
+  },
+
+  /* ---------- Network, Privacy & Online Safety ---------- */
+
+  {
+    category: "Network, Privacy & Online Safety",
+    difficulty: "Easy",
+    question: "What is the safest behavior when using public Wi-Fi?",
+    choices: [
+      "Access online banking immediately",
+      "Share your password",
+      "Avoid sensitive activities and use a trusted secure connection",
+      "Disable device security"
+    ],
+    answer: 2,
+    explanation: "Public Wi-Fi can expose users to security risks. Use a personal hotspot or trusted VPN when possible."
+  },
+
+  {
+    category: "Network, Privacy & Online Safety",
+    difficulty: "Easy",
+    question: "What does HTTPS usually indicate about a website?",
+    choices: [
+      "The website is guaranteed to be legitimate",
+      "The browser connection is encrypted",
+      "The website cannot contain malware",
+      "The website collects no information"
+    ],
+    answer: 1,
+    explanation: "HTTPS encrypts information between your browser and the website, but you should still check the address carefully."
+  },
+
+  {
+    category: "Network, Privacy & Online Safety",
+    difficulty: "Medium",
+    question: "Which privacy setting is safest for a social-media account?",
+    choices: [
+      "Make every post public",
+      "Accept every request",
+      "Limit posts and information to trusted people",
+      "Display your phone number"
+    ],
+    answer: 2,
+    explanation: "Restricting visibility reduces the personal information available to strangers."
+  },
+
+  {
+    category: "Network, Privacy & Online Safety",
+    difficulty: "Medium",
+    question: "Which information should you avoid sharing publicly online?",
+    choices: [
+      "A favorite movie",
+      "A hobby",
+      "Your home address, passwords, and financial information",
+      "A public event announcement"
+    ],
+    answer: 2,
+    explanation: "Sensitive information can be used for identity theft, fraud, or account compromise."
+  },
+
+  {
+    category: "Network, Privacy & Online Safety",
+    difficulty: "Medium",
+    question: "Why should you be careful when sharing your location online?",
+    choices: [
+      "It slows down your device",
+      "It can reveal where you live, work, or currently are",
+      "It prevents websites from loading",
+      "It changes your passwords"
+    ],
+    answer: 1,
+    explanation: "Location information can expose your routines and create privacy or physical-safety risks."
+  },
+
+  {
+    category: "Network, Privacy & Online Safety",
+    difficulty: "Hard",
+    question: "You receive a shortened link from an unknown account. What should you do?",
+    choices: [
+      "Click it before it expires",
+      "Forward it to friends",
+      "Reply with your username",
+      "Do not click it; verify the sender and report or delete it"
+    ],
+    answer: 3,
+    explanation: "Shortened links can hide phishing or malicious websites. Do not click unexpected links."
   }
 ];
-questions.push(...ameraPasswordQuestions.slice(0, 5));
-/* ==========================================================================
-   MEMBER 2 – QUIZ NAVIGATION AND FEEDBACK
-   ========================================================================== */
 
-let answerSelected = false;
+/* =========================================================
+   QUIZ FUNCTIONS
+   ========================================================= */
 
-// Start the quiz and display the first question.
 function startQuiz() {
-  const validQuestions = Array.isArray(questions) && questions.length > 0 &&
-    questions.every(q => q &&
-      typeof q.category === "string" &&
-      typeof q.question === "string" &&
-      Array.isArray(q.choices) && q.choices.length === 4 &&
-      q.choices.every(choice => typeof choice === "string") &&
-      Number.isInteger(q.answer) && q.answer >= 0 && q.answer < 4 &&
-      typeof q.explanation === "string");
-
-  if (!validQuestions) {
-    window.alert("The question bank is incomplete. Check the four choices and correct answer for each question.");
-    return;
-  }
-
   currentQuestion = 0;
-  score = 0; // Shared score; Member 4 handles category counters/restart.
+  score = 0;
+  categoryScores = {};
   homeScreen.hidden = true;
   resultsScreen.hidden = true;
   quizScreen.hidden = false;
   showQuestion();
 }
 
-// Display one question, its category, progress and four answer buttons.
 function showQuestion() {
-  const q = questions[currentQuestion];
+  const question = questions[currentQuestion];
+
   answerSelected = false;
 
-  questionNumber.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
-  progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-  categoryName.textContent = q.category; // Do not replace the parent badge's HTML.
-  difficultyLevel.textContent = q.difficulty || "";
-  questionText.textContent = q.question;
+  questionNumber.textContent =
+    `Question ${currentQuestion + 1} of ${questions.length}`;
+
+  progressBar.style.width =
+    `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+  categoryName.textContent = question.category;
+  difficultyLevel.textContent = question.difficulty;
+  questionText.textContent = question.question;
 
   answerOptions.replaceChildren();
-  q.choices.forEach((choice, index) => {
+
+  question.choices.forEach(function (choice, index) {
     const button = document.createElement("button");
+
     button.type = "button";
     button.className = "answer-btn";
-    button.textContent = choice; // style.css supplies the A/B/C/D letters.
-    button.addEventListener("click", () => selectAnswer(index));
+    button.textContent = choice;
+
+    button.addEventListener("click", function () {
+      selectAnswer(index);
+    });
+
     answerOptions.appendChild(button);
   });
 
   feedback.replaceChildren();
   feedback.className = "feedback";
-  nextBtn.disabled = true; // Can't move on until an answer has been chosen.
-  nextBtn.textContent = currentQuestion === questions.length - 1
-    ? "See Results" : "Next Question";
 
-  questionText.focus(); // Help keyboard/screen-reader users follow the quiz.
+  nextBtn.disabled = true;
+  nextBtn.textContent =
+    currentQuestion === questions.length - 1
+      ? "See Results"
+      : "Next Question";
+
+  questionText.focus();
 }
 
-// Check the selected answer and give immediate feedback once only.
 function selectAnswer(selectedIndex) {
-  if (answerSelected) return;
+  if (answerSelected) {
+    return;
+  }
 
-  const q = questions[currentQuestion];
-  if (!Number.isInteger(selectedIndex) ||
-      selectedIndex < 0 || selectedIndex >= q.choices.length) return;
+  const question = questions[currentQuestion];
+  const buttons = answerOptions.querySelectorAll("button");
+  const isCorrect = selectedIndex === question.answer;
 
   answerSelected = true;
-  const isCorrect = selectedIndex === q.answer;
-  const buttons = answerOptions.querySelectorAll("button");
 
-  buttons.forEach((button, index) => {
+  buttons.forEach(function (button, index) {
     button.disabled = true;
     button.classList.add("disabled");
-    if (index === selectedIndex) button.classList.add("selected");
-    if (index === q.answer) button.classList.add("correct");
-    if (index === selectedIndex && !isCorrect) button.classList.add("incorrect");
+
+    if (index === selectedIndex) {
+      button.classList.add("selected");
+    }
+
+    if (index === question.answer) {
+      button.classList.add("correct");
+    }
+
+    if (index === selectedIndex && !isCorrect) {
+      button.classList.add("incorrect");
+    }
   });
+
+  if (!categoryScores[question.category]) {
+    categoryScores[question.category] = {
+      correct: 0,
+      attempted: 0
+    };
+  }
+
+  categoryScores[question.category].attempted++;
+
+  if (isCorrect) {
+    score++;
+    categoryScores[question.category].correct++;
+  }
 
   const title = document.createElement("strong");
   title.className = "feedback-title";
@@ -325,47 +490,94 @@ function selectAnswer(selectedIndex) {
 
   const explanation = document.createElement("p");
   explanation.className = "feedback-explanation";
-  explanation.textContent = q.explanation;
-  feedback.replaceChildren(title, explanation);
-  feedback.className = `feedback ${isCorrect ? "feedback-success" : "feedback-error"}`;
+  explanation.textContent = question.explanation;
 
-  // Member 4 may later supply a score/category counter function.
-  // Do not increment again inside recordAnswer() AND here.
-  if (typeof recordAnswer === "function") {
-    recordAnswer(isCorrect, q.category);
-  } else if (isCorrect) {
-    score += 1;
-  }
+  feedback.replaceChildren(title, explanation);
+  feedback.className =
+    `feedback ${isCorrect ? "feedback-success" : "feedback-error"}`;
 
   nextBtn.disabled = false;
 }
 
-// Move forward only after answering; hand the final page to Member 4.
 function nextQuestion() {
-  if (!answerSelected) return;
+  if (!answerSelected) {
+    return;
+  }
 
-  if (currentQuestion + 1 < questions.length) {
-    currentQuestion += 1;
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
     showQuestion();
   } else {
-    showResults(); //  Roaa implements the final results screen.
+    showResults();
   }
 }
 
-// The HTML already loads script.js at the end of <body>.
+/* =========================================================
+   RESULTS AND RESTART
+   ========================================================= */
+
+function showResults() {
+  const totalQuestions = questions.length;
+  const percentage = Math.round((score / totalQuestions) * 100);
+
+  let level;
+
+  if (percentage >= 81) {
+    level = "Cyber Expert";
+  } else if (percentage >= 61) {
+    level = "Cyber Smart";
+  } else if (percentage >= 41) {
+    level = "Developing";
+  } else {
+    level = "Beginner";
+  }
+
+  let weakestCategory = "No category recorded";
+  let weakestPercentage = 100;
+
+  Object.keys(categoryScores).forEach(function (category) {
+    const result = categoryScores[category];
+    const categoryPercentage =
+      (result.correct / result.attempted) * 100;
+
+    if (categoryPercentage < weakestPercentage) {
+      weakestPercentage = categoryPercentage;
+      weakestCategory = category;
+    }
+  });
+
+  finalScore.textContent = `${score}/${totalQuestions}`;
+  scorePercentage.textContent = `${percentage}%`;
+  correctCount.textContent = score;
+  incorrectCount.textContent = totalQuestions - score;
+
+  scoreRing.style.setProperty("--score", percentage);
+
+  performanceMessage.textContent =
+    `${level} — You scored ${percentage}% overall.`;
+
+  weakCategory.textContent = weakestCategory;
+
+  recommendation.textContent =
+    `Review ${weakestCategory}, read the explanations again, and practice the recommended safe actions before retaking the quiz.`;
+
+  quizScreen.hidden = true;
+  homeScreen.hidden = true;
+  resultsScreen.hidden = false;
+}
+
+function restartQuiz() {
+  currentQuestion = 0;
+  score = 0;
+  answerSelected = false;
+  categoryScores = {};
+
+  resultsScreen.hidden = true;
+  homeScreen.hidden = false;
+}
+
 startBtn.addEventListener("click", startQuiz);
 nextBtn.addEventListener("click", nextQuestion);
+restartBtn.addEventListener("click", restartQuiz);
+
 nextBtn.disabled = true;
-
-
-/* ==========================================================================
-   MEMBER 4 – SCORE, RESULTS AND RESTART
-   ========================================================================== */
-
-// Hide the quiz screen, show the results screen and fill in the score
-function showResults() {
-}
-
-// Restart button: reset the score and go back to the start
-function restartQuiz() {
-}
